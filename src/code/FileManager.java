@@ -22,26 +22,37 @@ public class FileManager {
     public void addFile(String fileName) throws Exception {
         // Add logic to add the file
         //throw new UnsupportedOperationException("Add file operation not implemented yet.");
-    	File file = new File(fileName);
+    	 File directory = new File(".");
+         File[] files = directory.listFiles();
 
-        if (file.createNewFile()) {
-            System.out.println("File created successfully: " + fileName);
-            System.out.println("Enter content for the file (press Enter on an empty line to finish):");
+         if (files != null) {
+             for (File file : files) {
+                 if (file.getName().equalsIgnoreCase(fileName)) {
+                     throw new IOException("File already exists: " + fileName);
+                 }
+             }
+         }
 
-            try (FileWriter writer = new FileWriter(file)) {
-                Scanner scanner = new Scanner(System.in);
-                String line;
+         File newFile = new File(fileName);
 
-                while (!(line = scanner.nextLine()).isEmpty()) {
-                    writer.write(line);
-                    writer.write(System.lineSeparator());
-                }
-                
-                System.out.println("Content saved to the file.");
-            }
-        } else {
-            throw new IOException("Failed to create the file.");
-        }
+         if (newFile.createNewFile()) {
+             System.out.println("File created successfully: " + fileName);
+             System.out.println("Enter content for the file (press Enter on an empty line to finish):");
+
+             try (FileWriter writer = new FileWriter(newFile)) {
+                 Scanner scanner = new Scanner(System.in);
+                 String line;
+
+                 while (!(line = scanner.nextLine()).isEmpty()) {
+                     writer.write(line);
+                     writer.write(System.lineSeparator());
+                 }
+
+                 System.out.println("Content saved to the file.");
+             }
+         } else {
+             throw new IOException("Failed to create the file: " + fileName);
+         }
     }
 
     public void deleteFile(String fileName) throws Exception {
