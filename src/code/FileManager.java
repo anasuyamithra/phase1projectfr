@@ -8,22 +8,27 @@ import java.io.FileWriter;
 import java.util.Scanner;
 
 public class FileManager {
-    public void displayFileNames() {
-        File rootDirectory = new File(".");
-        String[] fileNames = rootDirectory.list();
+	
+	private void selectionSort(String[] fileNames) {
         for (int i = 0; i < fileNames.length - 1; i++) {
             int minIndex = i;
-            
+
             for (int j = i + 1; j < fileNames.length; j++) {
                 if (fileNames[j].compareToIgnoreCase(fileNames[minIndex]) < 0) {
                     minIndex = j;
                 }
             }
-            
+
             String temp = fileNames[minIndex];
             fileNames[minIndex] = fileNames[i];
             fileNames[i] = temp;
         }
+    }
+	
+    public void displayFileNames() {
+        File rootDirectory = new File(".");
+        String[] fileNames = rootDirectory.list();
+        selectionSort(fileNames);
 
         System.out.println("\nCurrent file names in ascending order:");
         for (String fileName : fileNames) {
@@ -80,8 +85,39 @@ public class FileManager {
         }
     }
 
-    public boolean searchFile(String fileName) {
-        File file = new File(fileName);
-        return file.exists();
+    public void searchFile(String fileName) {
+    	File rootDirectory = new File(".");
+        String[] fileNames = rootDirectory.list();
+        if (fileNames.length == 0) {
+            System.out.println("The directory is empty.");
+            return ;
+        }
+
+        // Sort the file names in ascending order using selection sort
+        selectionSort(fileNames);
+
+        // Binary search algorithm for searching the file
+        int left = 0;
+        int right = fileNames.length - 1;
+        boolean found = false;
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            int comparison = fileName.compareToIgnoreCase(fileNames[mid]);
+
+            if (comparison == 0) {
+                System.out.println("File found: " + fileNames[mid]);
+                found = true;
+                break;
+            } else if (comparison < 0) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+
+        if (!found) {
+            System.out.println("File not found: " + fileName);
+        }
     }
 }

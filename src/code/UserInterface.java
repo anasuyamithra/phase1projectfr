@@ -111,18 +111,9 @@ public class UserInterface {
     }
 
     private void searchFile(Scanner scanner) {
-        System.out.print("Enter the file name to search: ");
-        String fileName = scanner.nextLine();
+         System.out.println("Enter the file name to search:");
+         String fileName = scanner.nextLine();
 
-        try {
-            boolean found = fileManager.searchFile(fileName);
-            if (found) {
-                System.out.println("File found.");
-            } else {
-                System.out.println("File not found.");
-            }
-        } catch (Exception e) {
-            System.out.println("Error searching for the file: " + e.getMessage());
-        }
+         fileManager.searchFile(fileName);
     }
 }
