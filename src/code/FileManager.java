@@ -11,7 +11,19 @@ public class FileManager {
     public void displayFileNames() {
         File rootDirectory = new File(".");
         String[] fileNames = rootDirectory.list();
-        Arrays.sort(fileNames);
+        for (int i = 0; i < fileNames.length - 1; i++) {
+            int minIndex = i;
+            
+            for (int j = i + 1; j < fileNames.length; j++) {
+                if (fileNames[j].compareToIgnoreCase(fileNames[minIndex]) < 0) {
+                    minIndex = j;
+                }
+            }
+            
+            String temp = fileNames[minIndex];
+            fileNames[minIndex] = fileNames[i];
+            fileNames[i] = temp;
+        }
 
         System.out.println("\nCurrent file names in ascending order:");
         for (String fileName : fileNames) {
