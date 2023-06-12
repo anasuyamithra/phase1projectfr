@@ -66,6 +66,7 @@ public class UserInterface {
                 case 4:
                     exit = true;
                     System.out.println("Returning to the main context...");
+                    System.exit(0);
                     break;
                 default:
                     System.out.println("Invalid option. Please try again.");
