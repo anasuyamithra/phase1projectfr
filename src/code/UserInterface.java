@@ -72,7 +72,7 @@ public class UserInterface {
             }
         }
 
-       scanner.close();
+       //scanner.close();
     }
 
     private void displayFileManagementOptions() {
