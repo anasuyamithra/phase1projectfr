@@ -20,8 +20,12 @@ public class FileManager {
     }
 
     public void displayFileNames() {
-    	System.out.println("Inside file manager display function");
-        inOrderTraversal(root);
+    	//System.out.println("Inside file manager display function");
+    	if (root == null) {
+    		System.out.println("Directory is empty. \nPlease add some files. \n\nReturning to main menu...\n\n");
+        } else {
+            inOrderTraversal(root);
+        }
     }
 
     private void inOrderTraversal(TreeNode node) {
@@ -29,8 +33,6 @@ public class FileManager {
             inOrderTraversal(node.left);
             System.out.println(node.fileName);
             inOrderTraversal(node.right);
-        } else {
-        	System.out.println("Directory is empty. Please add some files.");
         }
     }
 
