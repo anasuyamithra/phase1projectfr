@@ -8,33 +8,64 @@ import java.io.FileWriter;
 import java.util.Scanner;
 
 public class FileManager {
-	
-	private void selectionSort(String[] fileNames) {
-        for (int i = 0; i < fileNames.length - 1; i++) {
-            int minIndex = i;
 
-            for (int j = i + 1; j < fileNames.length; j++) {
-                if (fileNames[j].compareToIgnoreCase(fileNames[minIndex]) < 0) {
-                    minIndex = j;
-                }
-            }
-
-            String temp = fileNames[minIndex];
-            fileNames[minIndex] = fileNames[i];
-            fileNames[i] = temp;
+    private void quicksort(String[] arr, int low, int high) {
+        if (low < high) {
+            int pivotIndex = partition(arr, low, high);
+            quicksort(arr, low, pivotIndex - 1);
+            quicksort(arr, pivotIndex + 1, high);
         }
+    }
+
+    private int partition(String[] arr, int low, int high) {
+        String pivot = arr[high];
+        int i = low - 1;
+
+        for (int j = low; j < high; j++) {
+            if (arr[j].compareTo(pivot) < 0) {
+                i++;
+                swap(arr, i, j);
+            }
+        }
+
+        swap(arr, i + 1, high);
+        return i + 1;
+    }
+
+    private void swap(String[] arr, int i, int j) {
+        String temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
     }
 	
     public void displayFileNames() {
         File rootDirectory = new File(".");
         String[] fileNames = rootDirectory.list();
-        selectionSort(fileNames);
+        quicksort(fileNames, 0, fileNames.length - 1);
 
         System.out.println("\nCurrent file names in ascending order:");
         for (String fileName : fileNames) {
             System.out.println(fileName);
         }
     }
+    
+//    public String[] getFileNames() {
+//        File folder = new File(directory);
+//        File[] files = folder.listFiles();
+//
+//        if (files == null) {
+//            return new String[0];
+//        }
+//
+//        String[] fileNames = new String[files.length];
+//        for (int i = 0; i < files.length; i++) {
+//            fileNames[i] = files[i].getName();
+//        }
+//
+//        quicksort(fileNames, 0, fileNames.length - 1);
+//
+//        return fileNames;
+//    }
 
     public void addFile(String fileName) throws Exception {
         // Add logic to add the file
@@ -86,38 +117,36 @@ public class FileManager {
     }
 
     public void searchFile(String fileName) {
-    	File rootDirectory = new File(".");
-        String[] fileNames = rootDirectory.list();
+    	File directory = new File(".");
+        String[] fileNames = directory.list();
+        
         if (fileNames.length == 0) {
             System.out.println("The directory is empty.");
-            return ;
+            return;
         }
+        quicksort(fileNames, 0, fileNames.length - 1);
+        
+        if(binarySearch(fileNames, fileName, 0, fileNames.length - 1)) {
+        	System.out.println("File exists.");
+        } else {
+        	System.out.println("File not found.");
+        }
+        
+    }
 
-        // Sort the file names in ascending order using selection sort
-        selectionSort(fileNames);
+    private boolean binarySearch(String[] arr, String key, int low, int high) {
+        if (low <= high) {
+            int mid = low + (high - low) / 2;
+            int result = key.compareTo(arr[mid]);
 
-        // Binary search algorithm for searching the file
-        int left = 0;
-        int right = fileNames.length - 1;
-        boolean found = false;
-
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
-            int comparison = fileName.compareToIgnoreCase(fileNames[mid]);
-
-            if (comparison == 0) {
-                System.out.println("File found: " + fileNames[mid]);
-                found = true;
-                break;
-            } else if (comparison < 0) {
-                right = mid - 1;
+            if (result == 0) {
+                return true;
+            } else if (result < 0) {
+                return binarySearch(arr, key, low, mid - 1);
             } else {
-                left = mid + 1;
+                return binarySearch(arr, key, mid + 1, high);
             }
         }
-
-        if (!found) {
-            System.out.println("File not found: " + fileName);
-        }
+        return false;
     }
 }
