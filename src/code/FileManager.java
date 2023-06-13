@@ -29,7 +29,7 @@ public class FileManager {
 
         if (files != null) {
             for (File file : files) {
-                if (file.isFile()) {
+                if (file.isFile() && !file.getName().startsWith(".")) {
                     insertNode(file.getName());
                 }
             }
