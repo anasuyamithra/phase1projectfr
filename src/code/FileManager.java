@@ -18,6 +18,23 @@ public class FileManager {
             this.fileName = fileName;
         }
     }
+    
+    public FileManager() {
+        buildInitialTree();
+    }
+
+    private void buildInitialTree() {
+        File rootDirectory = new File(".");
+        File[] files = rootDirectory.listFiles();
+
+        if (files != null) {
+            for (File file : files) {
+                if (file.isFile()) {
+                    insertNode(file.getName());
+                }
+            }
+        }
+    }
 
     public void displayFileNames() {
     	//System.out.println("Inside file manager display function");
